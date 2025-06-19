@@ -1,0 +1,26 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "tailwindCSS.includeLanguages": {
+    "javascript": "javascriptreact",
+    "html": "HTML"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["classnames\\(([^)]*)", "[\\\"'`]([^\"'`]*).*?[\\\"'`]"]
+  ],
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.inlineSuggest.enabled": true,
+  "workbench.colorCustomizations": {}
+}
