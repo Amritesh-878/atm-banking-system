@@ -1,0 +1,9 @@
+# This is a CSV file to store all transactions.
+# Example columns: id,account,description,amount,date,balance,customerId
+
+id,account,description,amount,date,balance,customerId
+1,Basic Checking,Deposit,1000,2024-06-01T10:00:00,1000,1
+2,Savings,Withdrawal,-500,2024-06-02T12:30:00,1500,1
+3,Basic Checking,Transfer,-200,2024-06-03T09:15:00,800,1
+4,Savings,Deposit,2000,2024-06-04T11:00:00,2500,2
+5,Basic Checking,Withdrawal,-300,2024-06-05T14:20:00,500,2
