@@ -1,6 +1,6 @@
 # Easy Cash ATM Application
 
-A full-stack ATM application with a React frontend, Node.js/Express backend, and Java console client.
+A full-stack ATM application with a React frontend, Node.js/Express backend.
 
 ## Project Structure
 
@@ -20,11 +20,13 @@ atm-application/
 ### 1. Backend Setup
 
 1. Navigate to the backend directory:
+
    ```bash
    cd backend
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -38,11 +40,13 @@ atm-application/
 ### 2. Frontend Setup
 
 1. Navigate to the frontend directory:
+
    ```bash
    cd frontend
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -53,16 +57,15 @@ atm-application/
    ```
    The frontend will be available at `http://localhost:3000`
 
-
 ## Demo Accounts
 
 Use the following demo accounts to log in:
 
 | Customer Number | PIN  |
-|----------------|------|
-| 12345          | 1234 |
-| 67890          | 5678 |
-| 11111          | 9999 |
+| --------------- | ---- |
+| 12345           | 1234 |
+| 67890           | 5678 |
+| 11111           | 9999 |
 
 ## Features
 
@@ -76,6 +79,7 @@ Use the following demo accounts to log in:
 ## Technologies Used
 
 ### Frontend
+
 - React
 - React Router
 - Tailwind CSS
@@ -83,12 +87,8 @@ Use the following demo accounts to log in:
 - Vite
 
 ### Backend
+
 - Node.js
 - Express
 - CSV-based data storage
 - RESTful API
-
-### Java ATM
-- Java
-- File I/O
-- Console-based UI

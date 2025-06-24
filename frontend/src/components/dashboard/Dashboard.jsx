@@ -75,8 +75,8 @@ const Dashboard = () => {
             onClick={() => navigate("/balance")}
             icon={Eye}
             iconColor="text-blue-500"
-            title="Check Balance"
-            description="View account balances"
+            title="Transaction History"
+            description="View accounts transactions"
           />
         </div>
       </div>
