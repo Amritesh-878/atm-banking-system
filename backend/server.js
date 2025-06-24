@@ -21,39 +21,66 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/accounts", accountRoutes);
-app.use("/api/transactions", transactionRoutes);
-
 app.get("/api/transactions/all", (req, res) => {
+  console.log("GET /api/transactions/all called"); // <-- Add this log
   const results = [];
-  // This line connects to the transaction_history.csv file
   const filePath = path.join(__dirname, "data", "transaction_history.csv");
+
+  // Debug: Print the file path being read
+  console.log("Reading transaction history from:", filePath);
+
+  // Check if file exists before reading
+  if (!fs.existsSync(filePath)) {
+    console.error("CSV file not found:", filePath);
+    return res.json([]); // Return empty array if file doesn't exist
+  }
+
   fs.createReadStream(filePath)
-    .pipe(csv())
+    .pipe(csv({ skipLines: 0, trim: true }))
     .on("data", (data) => {
+      // Debug: Print each row as it's parsed
+      console.log("Parsed row:", data);
+
+      // Remove any leading/trailing whitespace from all fields
+      const cleanData = {};
+      Object.keys(data).forEach((key) => {
+        cleanData[key.trim()] = typeof data[key] === "string" ? data[key].trim() : data[key];
+      });
+
+      // Defensive: check for header row, comments, and valid numeric id
       if (
-        data.account &&
-        data.description &&
-        data.amount &&
-        data.date
+        cleanData.account &&
+        cleanData.description &&
+        cleanData.amount &&
+        cleanData.date &&
+        cleanData.id &&
+        !isNaN(Number(cleanData.id)) && // id must be a number (not header)
+        cleanData.account.toLowerCase() !== "account" &&
+        !cleanData.account.startsWith("#")
       ) {
         results.push({
-          ...data,
-          amount: Number(data.amount),
-          balance: data.balance ? Number(data.balance) : undefined,
+          ...cleanData,
+          amount: Number(cleanData.amount),
+          balance: cleanData.balance && !isNaN(Number(cleanData.balance)) ? Number(cleanData.balance) : undefined,
+          customerId: cleanData.customerId ? cleanData.customerId.trim() : undefined,
         });
       }
     })
     .on("end", () => {
-      // This line prints the transactions to your backend console
-      console.log("Sending transactions:", results);
+      // Debug: log what is being sent to frontend
+      console.log("Parsed transactions (final results):", results);
       res.json(results);
     })
     .on("error", (err) => {
+      console.error("Error reading CSV:", err);
       res.status(500).json({ error: "Could not read transaction history file." });
     });
 });
+
+// Register this route BEFORE the transactionRoutes!
+app.use("/api/auth", authRoutes);
+app.use("/api/accounts", accountRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 import errorHandler from "./middleware/errorHandler.js";
 

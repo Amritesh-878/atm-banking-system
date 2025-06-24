@@ -36,6 +36,9 @@ router.post("/withdraw/:customerId", async (req, res) => {
 
     const result = await processTransaction(customerId, account, -amountNum);
 
+    // Use current date/time for the transaction
+    const transactionDate = new Date().toISOString();
+
     res.json({
       success: true,
       message: "Withdrawal successful",
@@ -45,8 +48,9 @@ router.post("/withdraw/:customerId", async (req, res) => {
         account: account === ACCOUNT_TYPES.BASIC ? "Basic Checking" : "Savings",
         amount: amountNum,
         currency: "INR",
-        timestamp: new Date().toISOString(),
+        timestamp: transactionDate, // <-- use current date/time
       },
+      date: transactionDate, // Optionally include for frontend
     });
   } catch (error) {
     console.error("Withdrawal error:", error);
@@ -90,6 +94,9 @@ router.post("/deposit/:customerId", async (req, res) => {
 
     const result = await processTransaction(customerId, account, amountNum);
 
+    // Use current date/time for the transaction
+    const transactionDate = new Date().toISOString();
+
     res.json({
       success: true,
       message: "Deposit successful",
@@ -99,8 +106,9 @@ router.post("/deposit/:customerId", async (req, res) => {
         account: account === ACCOUNT_TYPES.BASIC ? "Basic Checking" : "Savings",
         amount: amountNum,
         currency: "INR",
-        timestamp: new Date().toISOString(),
+        timestamp: transactionDate, // <-- use current date/time
       },
+      date: transactionDate, // Optionally include for frontend
     });
   } catch (error) {
     console.error("Deposit error:", error);

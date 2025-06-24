@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 
 const BalanceScreen = () => {
+  console.log("BalanceScreen mounted");
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -15,11 +16,42 @@ const BalanceScreen = () => {
       .then((res) => res.json())
       .then((data) => {
         // Debug: Show what is received from backend
-        console.log("Fetched transactions:", data);
+        console.log("Fetched transactions (raw):", data);
         setAllDbTransactions(Array.isArray(data) ? data : []);
       })
       .catch(() => setAllDbTransactions([]));
   }, []);
+
+  // Debug: Log current user info for troubleshooting
+  useEffect(() => {
+    console.log("Current user:", currentUser);
+  }, [currentUser]);
+
+  // Log all customer IDs being compared (debugging)
+  useEffect(() => {
+    if (Array.isArray(allDbTransactions)) {
+      allDbTransactions.forEach((txn) => {
+        console.log(
+          "Comparing txn.customerId:",
+          `"${txn.customerId}"`,
+          "with currentUser.customerNumber:",
+          `"${currentUser?.customerNumber}"`,
+          "and currentUser.id:",
+          `"${currentUser?.id}"`
+        );
+      });
+    }
+  }, [allDbTransactions, currentUser]);
+
+  // Filter transactions for the current user (robust string/trim comparison)
+  const filteredDbTransactions = Array.isArray(allDbTransactions)
+    ? allDbTransactions.filter((txn) => {
+        const txnId = txn.customerId ? String(txn.customerId).trim() : "";
+        const userId = currentUser && currentUser.customerNumber ? String(currentUser.customerNumber).trim() : "";
+        const userAltId = currentUser && currentUser.id ? String(currentUser.id).trim() : "";
+        return txnId && (txnId === userId || txnId === userAltId);
+      })
+    : [];
 
   // Calculate total balance
   const totalBalance =
@@ -116,11 +148,6 @@ const BalanceScreen = () => {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Transaction History
           </h3>
-          {/* Debug: Show raw backend data */}
-          <div className="bg-red-50 text-xs text-red-700 p-2 my-2 rounded">
-            <strong>Debug: Raw backend data</strong>
-            <pre>{JSON.stringify(allDbTransactions, null, 2)}</pre>
-          </div>
           <table className="min-w-full text-sm">
             <thead>
               <tr>
@@ -133,21 +160,21 @@ const BalanceScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(allDbTransactions) && allDbTransactions.length > 0 ? (
-                allDbTransactions
+              {Array.isArray(filteredDbTransactions) && filteredDbTransactions.length > 0 ? (
+                filteredDbTransactions
                   .map((txn, idx) => (
                     <tr key={idx} className="border-t">
-                      <td className="py-2 px-2">{txn.account || "-"}</td>
+                      <td className="py-2 px-2">{txn.account || txn.accountType || "-"}</td>
                       <td className="py-2 px-2">{txn.description || "-"}</td>
                       <td className={`py-2 px-2 text-right ${Number(txn.amount) >= 0 ? "text-green-600" : "text-red-600"}`}>
                         {Number(txn.amount) >= 0 ? "+" : ""}
-                        ₹{Number(txn.amount).toLocaleString()}
+                        ₹{!isNaN(Number(txn.amount)) ? Number(txn.amount).toLocaleString() : "-"}
                       </td>
                       <td className="py-2 px-2">
                         {txn.date ? new Date(txn.date).toLocaleString() : "-"}
                       </td>
                       <td className="py-2 px-2 text-right">
-                        {txn.balance ? `₹${Number(txn.balance).toLocaleString()}` : "-"}
+                        {txn.balance && !isNaN(Number(txn.balance)) ? `₹${Number(txn.balance).toLocaleString()}` : "-"}
                       </td>
                       <td className="py-2 px-2">{txn.customerId || "-"}</td>
                     </tr>
@@ -187,6 +214,8 @@ const BalanceScreen = () => {
 };
 
 export default BalanceScreen;
+          
+
 
 
 
