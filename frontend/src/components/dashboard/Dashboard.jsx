@@ -76,7 +76,7 @@ const Dashboard = () => {
             icon={Eye}
             iconColor="text-blue-500"
             title="Transaction History"
-            description="View accounts transactions"
+            description="View account transactions"
           />
         </div>
       </div>

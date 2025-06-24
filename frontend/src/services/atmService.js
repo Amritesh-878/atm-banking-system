@@ -109,10 +109,8 @@ export const transactionService = {
   },
 };
 
-// Add request interceptor for auth if needed
 api.interceptors.request.use(
   (config) => {
-    // Add auth token if available
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -124,14 +122,11 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized errors (e.g., redirect to login)
       console.error("Unauthorized access - redirecting to login");
-      // You might want to redirect to login here
     }
     return Promise.reject(error);
   }

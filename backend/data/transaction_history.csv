@@ -1,0 +1,8 @@
+id,account,description,amount,date,balance,customerId
+1,Basic Checking,Deposit,1000,2025-06-24T09:00:00,1000,12345
+2,Basic Checking,Deposit,2517,2025-06-24T10:30:00,3517,12345
+3,Savings,Deposit,2000,2025-06-23T11:15:00,2000,12345
+4,Savings,Withdrawal,-100,2025-06-23T15:45:00,1900,12345
+5,Savings,Deposit,2000,2025-06-25T09:30:00,9500,67890
+6,Basic Checking,Deposit,800,2025-06-25T10:45:00,3800,67890
+7,Basic Checking,Withdrawal,-800,2025-06-24T16:00:00,3000,67890

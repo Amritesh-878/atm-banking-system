@@ -4,7 +4,6 @@ import { TRANSACTION, ACCOUNT_TYPES } from "../config/constants.js";
 
 const router = express.Router();
 
-// Process withdrawal
 router.post("/withdraw/:customerId", async (req, res) => {
   try {
     const { customerId } = req.params;
@@ -19,7 +18,7 @@ router.post("/withdraw/:customerId", async (req, res) => {
       return res.status(400).json({ error: "Invalid amount" });
     }
 
-    // Validate withdrawal amount
+    
     if (amountNum % TRANSACTION.WITHDRAWAL_MULTIPLE !== 0) {
       return res.status(400).json({
         error: `Withdrawal amount must be in multiples of ${TRANSACTION.CURRENCY_SYMBOL}20`,
@@ -36,6 +35,9 @@ router.post("/withdraw/:customerId", async (req, res) => {
 
     const result = await processTransaction(customerId, account, -amountNum);
 
+  
+    const transactionDate = new Date().toISOString();
+
     res.json({
       success: true,
       message: "Withdrawal successful",
@@ -45,8 +47,9 @@ router.post("/withdraw/:customerId", async (req, res) => {
         account: account === ACCOUNT_TYPES.BASIC ? "Basic Checking" : "Savings",
         amount: amountNum,
         currency: "INR",
-        timestamp: new Date().toISOString(),
+        timestamp: transactionDate,
       },
+      date: transactionDate, 
     });
   } catch (error) {
     console.error("Withdrawal error:", error);
@@ -90,6 +93,9 @@ router.post("/deposit/:customerId", async (req, res) => {
 
     const result = await processTransaction(customerId, account, amountNum);
 
+    
+    const transactionDate = new Date().toISOString();
+
     res.json({
       success: true,
       message: "Deposit successful",
@@ -99,8 +105,9 @@ router.post("/deposit/:customerId", async (req, res) => {
         account: account === ACCOUNT_TYPES.BASIC ? "Basic Checking" : "Savings",
         amount: amountNum,
         currency: "INR",
-        timestamp: new Date().toISOString(),
+        timestamp: transactionDate, 
       },
+      date: transactionDate, 
     });
   } catch (error) {
     console.error("Deposit error:", error);

@@ -2,14 +2,6 @@
 
 A full-stack ATM application with a React frontend, Node.js/Express backend.
 
-## Project Structure
-
-```
-atm-application/
-├── frontend/          # React frontend application
-├── backend/           # Node.js/Express backend API
-```
-
 ## Prerequisites
 
 - Node.js (v16+)
